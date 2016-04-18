@@ -969,8 +969,7 @@ namespace Nop.Web.Controllers
                     _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.LastName, model.LastName);
                     if (_customerSettings.DateOfBirthEnabled)
                     {
-                        DateTime? dateOfBirth = model.ParseDateOfBirth();
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.DateOfBirth, dateOfBirth);
+                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.DateOfBirth, model.DateOfBirth);
                     }
                     if (_customerSettings.CompanyEnabled)
                         _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Company, model.Company);

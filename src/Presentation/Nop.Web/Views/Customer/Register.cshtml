@@ -89,21 +89,12 @@
                     {
                         <div class="inputs date-of-birth">
                             <label>@T("Account.Fields.DateOfBirth"):</label>
-                            @Html.DatePickerDropDowns(Html.FieldNameFor(x => x.DateOfBirthDay),
-                                Html.FieldNameFor(x => x.DateOfBirthMonth),
-                                Html.FieldNameFor(x => x.DateOfBirthYear),
-                                DateTime.Now.Year - 110,
-                                DateTime.Now.Year,
-                                Model.DateOfBirthDay,
-                                Model.DateOfBirthMonth,
-                                Model.DateOfBirthYear)
+                            @Html.EditorFor(model=>model.DateOfBirth)
                             @if (Model.DateOfBirthRequired)
                             {
                                 @Html.RequiredHint()
                             }
-                            @Html.ValidationMessageFor(model => model.DateOfBirthDay)
-                            @Html.ValidationMessageFor(model => model.DateOfBirthMonth)
-                            @Html.ValidationMessageFor(model => model.DateOfBirthYear)
+                            @Html.ValidationMessageFor(model => model.DateOfBirth)
                         </div>
                     }
                     <div class="inputs">

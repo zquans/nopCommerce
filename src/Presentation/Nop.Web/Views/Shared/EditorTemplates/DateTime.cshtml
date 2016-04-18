@@ -1,0 +1,16 @@
+﻿@model DateTime?
+@Html.TextBox("", Model.HasValue ? Model.Value.ToString("d") : String.Empty)
+@{
+    var currentDate = Model ?? DateTime.Now;
+}
+<script type="text/javascript">
+    $(function() {
+        $('#@Html.IdForModel()').datepicker({
+            pickTime: false,
+            changeYear: true,
+            changeMonth: true,
+            yearRange: "1901:@(DateTime.Now.Year)",
+            setDate: "@(currentDate.Day)/@(currentDate.Month)/@(currentDate.Year)"
+        });
+    });
+</script>
