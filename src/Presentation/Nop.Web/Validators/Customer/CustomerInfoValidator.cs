@@ -56,17 +56,16 @@ namespace Nop.Web.Validators.Customer
             {
                 Custom(x =>
                 {
-                    var dateOfBirth = x.ParseDateOfBirth();
                     //entered?
-                    if (!dateOfBirth.HasValue)
+                    if (!x.DateOfBirth.HasValue)
                     {
-                        return new ValidationFailure("DateOfBirthDay", localizationService.GetResource("Account.Fields.DateOfBirth.Required"));
+                        return new ValidationFailure("DateOfBirth", localizationService.GetResource("Account.Fields.DateOfBirth.Required"));
                     }
                     //minimum age
                     if (customerSettings.DateOfBirthMinimumAge.HasValue &&
-                        CommonHelper.GetDifferenceInYears(dateOfBirth.Value, DateTime.Today) < customerSettings.DateOfBirthMinimumAge.Value)
+                        CommonHelper.GetDifferenceInYears(x.DateOfBirth.Value, DateTime.Today) < customerSettings.DateOfBirthMinimumAge.Value)
                     {
-                        return new ValidationFailure("DateOfBirthDay", string.Format(localizationService.GetResource("Account.Fields.DateOfBirth.MinimumAge"), customerSettings.DateOfBirthMinimumAge.Value));
+                        return new ValidationFailure("DateOfBirth", string.Format(localizationService.GetResource("Account.Fields.DateOfBirth.MinimumAge"), customerSettings.DateOfBirthMinimumAge.Value));
                     }
                     return null;
                 });

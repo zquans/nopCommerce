@@ -320,9 +320,7 @@ namespace Nop.Web.Controllers
                 var dateOfBirth = customer.GetAttribute<DateTime?>(SystemCustomerAttributeNames.DateOfBirth);
                 if (dateOfBirth.HasValue)
                 {
-                    model.DateOfBirthDay = dateOfBirth.Value.Day;
-                    model.DateOfBirthMonth = dateOfBirth.Value.Month;
-                    model.DateOfBirthYear = dateOfBirth.Value.Year;
+                    model.DateOfBirth = dateOfBirth.Value;
                 }
                 model.Company = customer.GetAttribute<string>(SystemCustomerAttributeNames.Company);
                 model.StreetAddress = customer.GetAttribute<string>(SystemCustomerAttributeNames.StreetAddress);
@@ -1317,8 +1315,7 @@ namespace Nop.Web.Controllers
                     _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.LastName, model.LastName);
                     if (_customerSettings.DateOfBirthEnabled)
                     {
-                        DateTime? dateOfBirth = model.ParseDateOfBirth();
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.DateOfBirth, dateOfBirth);
+                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.DateOfBirth, model.DateOfBirth);
                     }
                     if (_customerSettings.CompanyEnabled)
                         _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Company, model.Company);
