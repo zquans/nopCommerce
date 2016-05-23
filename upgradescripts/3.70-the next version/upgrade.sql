@@ -656,6 +656,36 @@ set @resources='
   <LocaleResource Name="Admin.Dashboard.LatestOrders.ViewAll">
     <Value>View All Orders</Value>
   </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.ApiAccountName">
+    <Value></Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.ApiAccountName.Hint">
+    <Value></Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.ApiAccountPassword">
+    <Value></Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.ApiAccountPassword.Hint">
+    <Value></Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.Signature">
+    <Value></Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.Signature.Hint">
+    <Value></Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.ClientId">
+    <Value>Client ID</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.ClientId.Hint">
+    <Value>Specify client ID.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.ClientSecret">
+    <Value>Client secret</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.ClientSecret.Hint">
+    <Value>Specify secret key.</Value>
+  </LocaleResource>
 </Language>
 '
 
