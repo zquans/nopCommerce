@@ -18,6 +18,8 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
 {
     public class WidgetsGoogleAnalyticsController : BasePluginController
     {
+        #region Fields
+
         private readonly IWorkContext _workContext;
         private readonly IStoreContext _storeContext;
         private readonly IStoreService _storeService;
@@ -27,6 +29,10 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IProductAttributeParser _productAttributeParser;
         private readonly ILocalizationService _localizationService;
+
+        #endregion
+
+        #region Ctor
 
         public WidgetsGoogleAnalyticsController(IWorkContext workContext,
             IStoreContext storeContext, 
@@ -48,6 +54,10 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
             this._productAttributeParser = productAttributeParser;
             this._localizationService = localizationService;
         }
+
+        #endregion
+
+        #region Methods
 
         [AdminAuthorize]
         [ChildActionOnly]
@@ -138,6 +148,16 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
                 {
                     globalScript += GetTrackingScript();
                 }
+
+                //push the customer identifier into the analytics script as userId
+                if (_workContext.CurrentCustomer.CustomerRoles.Any(cr => string.Equals(cr.Name, "Registered")))
+                {
+                    globalScript = globalScript.Replace("{USERID}", _workContext.CurrentCustomer.Id.ToString());
+                }
+                else
+                {
+                    globalScript = globalScript.Replace("_gaq.push(['_setCustomVar',1,'userId','{USERID}',1]);\r\n", string.Empty);
+                }
             }
             catch (Exception ex)
             {
@@ -145,6 +165,10 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
             }
             return Content(globalScript);
         }
+
+        #endregion
+
+        #region Utilites
 
         private Order GetLastOrder()
         {
@@ -242,7 +266,7 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
                     if (defaultProductCategory != null)
                         category = defaultProductCategory.Category.Name;
                     analyticsEcommerceDetailScript = analyticsEcommerceDetailScript.Replace("{ORDERID}", item.OrderId.ToString());
-                    //The SKU code is a required parameter for every item that is added to the transaction
+                    //the SKU code is a required parameter for every item that is added to the transaction
                     analyticsEcommerceDetailScript = analyticsEcommerceDetailScript.Replace("{PRODUCTSKU}", FixIllegalJavaScriptChars(item.Product.FormatSku(item.AttributesXml, _productAttributeParser)));
                     analyticsEcommerceDetailScript = analyticsEcommerceDetailScript.Replace("{PRODUCTNAME}", FixIllegalJavaScriptChars(item.Product.Name));
                     analyticsEcommerceDetailScript = analyticsEcommerceDetailScript.Replace("{CATEGORYNAME}", FixIllegalJavaScriptChars(category));
@@ -255,7 +279,6 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
                 analyticsEcommerceScript = analyticsEcommerceScript.Replace("{DETAILS}", sb.ToString());
 
                 analyticsTrackingScript = analyticsTrackingScript.Replace("{ECOMMERCE}", analyticsEcommerceScript);
-
             }
 
             return analyticsTrackingScript;
@@ -270,5 +293,7 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
             text = text.Replace("'", "\\'");
             return text;
         }
+
+        #endregion
     }
 }
