@@ -7359,6 +7359,9 @@
   <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Fields.EmailAccount.Hint">
     <Value>The email account that will be used to send this message template.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Fields.EmailAccount.StandartValue">
+    <Value>Standart value</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Fields.IsActive">
     <Value>Is active</Value>
   </LocaleResource>

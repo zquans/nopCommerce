@@ -229,7 +229,7 @@ namespace Nop.Admin.Controllers
                 locale.Body = messageTemplate.GetLocalized(x => x.Body, languageId, false, false);
 
                 var emailAccountId = messageTemplate.GetLocalized(x => x.EmailAccountId, languageId, false, false);
-                locale.EmailAccountId = emailAccountId > 0 ? emailAccountId : _emailAccountSettings.DefaultEmailAccountId;
+                locale.EmailAccountId = emailAccountId;
             });
 
             return View(model);

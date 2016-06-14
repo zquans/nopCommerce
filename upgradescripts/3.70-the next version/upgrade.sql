@@ -674,6 +674,9 @@ set @resources='
   <LocaleResource Name="Admin.Orders.List.OrderGuid.Hint">
     <Value></Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Fields.EmailAccount.StandartValue">
+    <Value>Standart value</Value>
+  </LocaleResource>
 </Language>
 '
 

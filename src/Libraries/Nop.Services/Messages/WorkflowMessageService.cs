@@ -128,7 +128,12 @@ namespace Nop.Services.Messages
         protected virtual EmailAccount GetEmailAccountOfMessageTemplate(MessageTemplate messageTemplate, int languageId)
         {
             var emailAccounId = messageTemplate.GetLocalized(mt => mt.EmailAccountId, languageId);
+
+            if (emailAccounId == 0)
+                emailAccounId = messageTemplate.EmailAccountId;
+
             var emailAccount = _emailAccountService.GetEmailAccountById(emailAccounId);
+
             if (emailAccount == null)
                 emailAccount = _emailAccountService.GetEmailAccountById(_emailAccountSettings.DefaultEmailAccountId);
             if (emailAccount == null)

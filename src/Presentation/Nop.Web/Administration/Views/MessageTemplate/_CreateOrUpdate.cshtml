@@ -112,8 +112,22 @@
                             @Html.NopLabelFor(model => model.Locales[item].EmailAccountId)
                         </div>
                         <div class="col-md-9">
-                            @Html.NopDropDownListFor(model => model.Locales[item].EmailAccountId, new SelectList(Model.AvailableEmailAccounts, "Id", "DisplayName", Model.Locales[item].EmailAccountId))
-                            @Html.ValidationMessageFor(model => model.Locales[item].EmailAccountId)
+                            @{
+                                var emailAccountList = new SelectList(Model.AvailableEmailAccounts, "Id", "DisplayName").ToList();
+                                emailAccountList.Insert(0, new SelectListItem
+                                {
+                                    Text = T("Admin.ContentManagement.MessageTemplates.Fields.EmailAccount.StandartValue").Text,
+                                    Value = "0"
+                                });
+
+                                foreach (var emailAccount in emailAccountList)
+                                {
+                                    emailAccount.Selected = Model.Locales[item].EmailAccountId.ToString().Equals(emailAccount.Value);
+                                }
+
+                                @Html.NopDropDownListFor(model => model.Locales[item].EmailAccountId, emailAccountList)
+                                @Html.ValidationMessageFor(model => model.Locales[item].EmailAccountId)
+                            }
                         </div>
                     </div>
                     <div class="form-group">
