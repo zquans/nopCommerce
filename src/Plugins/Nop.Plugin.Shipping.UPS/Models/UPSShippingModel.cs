@@ -26,6 +26,9 @@ namespace Nop.Plugin.Shipping.UPS.Models
         [NopResourceDisplayName("Plugins.Shipping.UPS.Fields.Password")]
         public string Password { get; set; }
 
+        [NopResourceDisplayName("Plugins.Shipping.UPS.Fields.ShipperNumber")]
+        public string ShipperNumber { get; set; }
+
         [NopResourceDisplayName("Plugins.Shipping.UPS.Fields.AdditionalHandlingCharge")]
         public decimal AdditionalHandlingCharge { get; set; }
 

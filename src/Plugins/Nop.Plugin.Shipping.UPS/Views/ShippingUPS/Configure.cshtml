@@ -74,6 +74,15 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.ShipperNumber)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.ShipperNumber)
+                        @Html.ValidationMessageFor(model => model.ShipperNumber)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
                         @Html.NopLabelFor(model => model.CustomerClassification)
                     </div>
                     <div class="col-md-9">

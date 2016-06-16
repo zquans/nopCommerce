@@ -13,6 +13,8 @@ namespace Nop.Plugin.Shipping.UPS
 
         public string Password { get; set; }
 
+        public string ShipperNumber { get; set; }
+
         public decimal AdditionalHandlingCharge { get; set; }
 
         public UPSCustomerClassification CustomerClassification { get; set; }

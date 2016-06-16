@@ -37,6 +37,7 @@ namespace Nop.Plugin.Shipping.UPS
         private const int MAXPACKAGEWEIGHT = 150;
         private const string MEASUREWEIGHTSYSTEMKEYWORD = "lb";
         private const string MEASUREDIMENSIONSYSTEMKEYWORD = "inches";
+        private static readonly string[] COUNTRYCODESFORSHIPPERNUMBER = { "US", "PR", "CA" };
 
         #endregion
 
@@ -94,6 +95,16 @@ namespace Nop.Plugin.Shipping.UPS
             string zipPostalCodeTo = getShippingOptionRequest.ShippingAddress.ZipPostalCode;
             string countryCodeFrom = getShippingOptionRequest.CountryFrom.TwoLetterIsoCode;
             string countryCodeTo = getShippingOptionRequest.ShippingAddress.Country.TwoLetterIsoCode;
+            string shipperNumber = _upsSettings.ShipperNumber;
+            string stateProvinceCodeTo = getShippingOptionRequest.ShippingAddress.StateProvince !=null 
+                ? getShippingOptionRequest.ShippingAddress.StateProvince.Abbreviation
+                : string.Empty;
+            string stateProvinceCodeFrom = getShippingOptionRequest.StateProvinceFrom != null
+                ? getShippingOptionRequest.StateProvinceFrom.Abbreviation
+                : string.Empty;
+
+            var shipperNumberRequired = COUNTRYCODESFORSHIPPERNUMBER.Contains(countryCodeFrom) &&
+                                        COUNTRYCODESFORSHIPPERNUMBER.Contains(countryCodeTo);
 
             var sb = new StringBuilder();
             sb.Append("<?xml version='1.0'?>");
@@ -123,6 +134,14 @@ namespace Nop.Plugin.Shipping.UPS
             }
             sb.Append("<Shipment>");
             sb.Append("<Shipper>");
+            if (shipperNumberRequired && !string.IsNullOrEmpty(shipperNumber) && !string.Equals(shipperNumber, "XXXXXX", StringComparison.InvariantCultureIgnoreCase))
+            {
+                sb.AppendFormat("<ShipperNumber>{0}</ShipperNumber>", shipperNumber);
+            }
+            if (!string.IsNullOrEmpty(stateProvinceCodeFrom))
+            {
+                sb.AppendFormat("<StateProvinceCode>{0}</StateProvinceCode>", stateProvinceCodeFrom);
+            }
             sb.Append("<Address>");
             sb.AppendFormat("<PostalCode>{0}</PostalCode>", zipPostalCodeFrom);
             sb.AppendFormat("<CountryCode>{0}</CountryCode>", countryCodeFrom);
@@ -133,12 +152,20 @@ namespace Nop.Plugin.Shipping.UPS
             sb.Append("<ResidentialAddressIndicator/>");
             sb.AppendFormat("<PostalCode>{0}</PostalCode>", zipPostalCodeTo);
             sb.AppendFormat("<CountryCode>{0}</CountryCode>", countryCodeTo);
+            if (!string.IsNullOrEmpty(stateProvinceCodeTo))
+            {
+                sb.AppendFormat("<StateProvinceCode>{0}</StateProvinceCode>", stateProvinceCodeTo);
+            }
             sb.Append("</Address>");
             sb.Append("</ShipTo>");
             sb.Append("<ShipFrom>");
             sb.Append("<Address>");
             sb.AppendFormat("<PostalCode>{0}</PostalCode>", zipPostalCodeFrom);
             sb.AppendFormat("<CountryCode>{0}</CountryCode>", countryCodeFrom);
+            if (!string.IsNullOrEmpty(stateProvinceCodeFrom))
+            {
+                sb.AppendFormat("<StateProvinceCode>{0}</StateProvinceCode>", stateProvinceCodeFrom);
+            }
             sb.Append("</Address>");
             sb.Append("</ShipFrom>");
             sb.Append("<Service>");
@@ -817,6 +844,7 @@ namespace Nop.Plugin.Shipping.UPS
                 AccessKey = "AccessKey1",
                 Username = "Username1",
                 Password = "Password",
+                ShipperNumber = "XXXXXX",
                 CustomerClassification = UPSCustomerClassification.Retail,
                 PickupType = UPSPickupType.OneTimePickup,
                 PackagingType = UPSPackagingType.ExpressBox,
@@ -835,6 +863,8 @@ namespace Nop.Plugin.Shipping.UPS
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.UPS.Fields.Username.Hint", "Specify UPS username.");
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.UPS.Fields.Password", "Password");
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.UPS.Fields.Password.Hint", "Specify UPS password.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.UPS.Fields.ShipperNumber", "Shipper Number");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.UPS.Fields.ShipperNumber.Hint", "Enter your optional shipper number here for CAN, PR and US shipments.");
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.UPS.Fields.AdditionalHandlingCharge", "Additional handling charge");
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.UPS.Fields.AdditionalHandlingCharge.Hint", "Enter additional handling fee to charge your customers.");
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.UPS.Fields.InsurePackage", "Insure package");
@@ -888,6 +918,8 @@ namespace Nop.Plugin.Shipping.UPS
             this.DeletePluginLocaleResource("Plugins.Shipping.UPS.Fields.Username.Hint");
             this.DeletePluginLocaleResource("Plugins.Shipping.UPS.Fields.Password");
             this.DeletePluginLocaleResource("Plugins.Shipping.UPS.Fields.Password.Hint");
+            this.DeletePluginLocaleResource("Plugins.Shipping.UPS.Fields.ShipperNumber");
+            this.DeletePluginLocaleResource("Plugins.Shipping.UPS.Fields.ShipperNumber.Hint");
             this.DeletePluginLocaleResource("Plugins.Shipping.UPS.Fields.AdditionalHandlingCharge");
             this.DeletePluginLocaleResource("Plugins.Shipping.UPS.Fields.AdditionalHandlingCharge.Hint");
             this.DeletePluginLocaleResource("Plugins.Shipping.UPS.Fields.InsurePackage");
