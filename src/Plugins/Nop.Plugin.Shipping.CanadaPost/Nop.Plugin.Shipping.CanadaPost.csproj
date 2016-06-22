@@ -61,6 +61,7 @@
     <Compile Include="CanadaPostComputationMethod.cs" />
     <Compile Include="CanadaPostSettings.cs" />
     <Compile Include="Controllers\ShippingCanadaPostController.cs" />
+    <Compile Include="Domain\discovery.cs" />
     <Compile Include="Domain\messages.cs" />
     <Compile Include="Domain\rating.cs" />
     <Compile Include="CanadaPostShipmentTracker.cs" />

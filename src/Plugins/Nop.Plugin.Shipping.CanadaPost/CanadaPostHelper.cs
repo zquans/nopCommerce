@@ -23,7 +23,7 @@ namespace Nop.Plugin.Shipping.CanadaPost
         /// <param name="isSandbox">Is sandbox (testing environment) used</param>
         /// <param name="errors">Errors</param>
         /// <returns>Shipping services</returns>
-        public static pricequotes GetShippingServices(mailingscenario mailingScenario, string apiKey, bool isSandbox, out string errors)
+        public static pricequotes GetShippingRates(mailingscenario mailingScenario, string apiKey, bool isSandbox, out string errors)
         {
             var parameters = new StringBuilder();
             var xmlWriter = XmlWriter.Create(parameters);
@@ -34,9 +34,7 @@ namespace Nop.Plugin.Shipping.CanadaPost
             var method = "POST";
             var acceptType = "application/vnd.cpc.ship.rate-v3+xml";
             var url = string.Format("{0}/rs/ship/price", GetBaseUrl(isSandbox));
-
             var response = Request(parameters.ToString(), apiKey, method, acceptType, url, out errors);
-
             if (response == null)
                 return null;
 
@@ -46,6 +44,68 @@ namespace Nop.Plugin.Shipping.CanadaPost
                 {
                     var serializerResponse = new XmlSerializer(typeof(pricequotes));
                     return (pricequotes)serializerResponse.Deserialize(streamReader);
+                }
+            }
+            catch (Exception e)
+            {
+                errors = e.Message;
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Get list of available services
+        /// </summary>
+        /// <param name="countryCode">Two-letter ISO code of destination country</param>
+        /// <param name="apiKey">The API key</param>
+        /// <param name="isSandbox">Is sandbox (testing environment) used</param>
+        /// <param name="errors">Errors</param>
+        /// <returns>List of services</returns>
+        public static services GetServices(string countryCode, string apiKey, bool isSandbox, out string errors)
+        {
+            var method = "GET";
+            var acceptType = "application/vnd.cpc.ship.rate-v3+xml";
+            var url = string.Format("{0}/rs/ship/service?country={1}", GetBaseUrl(isSandbox), countryCode);
+            var response = Request(null, apiKey, method, acceptType, url, out errors);
+            if (response == null)
+                return null;
+
+            try
+            {
+                using (var streamReader = new StreamReader(response.GetResponseStream()))
+                {
+                    var serializerResponse = new XmlSerializer(typeof(services));
+                    return (services)serializerResponse.Deserialize(streamReader);
+                }
+            }
+            catch (Exception e)
+            {
+                errors = e.Message;
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Get service details
+        /// </summary>
+        /// <param name="apiKey">The API key</param>
+        /// <param name="url">URL endpoint</param>
+        /// <param name="acceptType">Request accept type</param>
+        /// <param name="errors">Errors</param>
+        /// <returns>Service object</returns>
+        public static service GetServiceDetails(string apiKey, string url, string acceptType, out string errors)
+        {
+            var method = "GET";
+            var response = Request(null, apiKey, method, acceptType, url, out errors);
+            if (response == null)
+                return null;
+
+            try
+            {
+                using (var streamReader = new StreamReader(response.GetResponseStream()))
+                {
+                    var serializerResponse = new XmlSerializer(typeof(service));
+                    return (service)serializerResponse.Deserialize(streamReader);
                 }
             }
             catch (Exception e)
