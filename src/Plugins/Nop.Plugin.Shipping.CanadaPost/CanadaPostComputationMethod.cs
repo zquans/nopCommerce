@@ -329,9 +329,11 @@ namespace Nop.Plugin.Shipping.CanadaPost
             }
 
             //write errors
-            _logger.Error(errorSummary.ToString());
+            var errorString = errorSummary.ToString();
+            if (!string.IsNullOrEmpty(errorString))
+                _logger.Error(errorString);
             if (result.ShippingOptions.Count == 0)
-                result.AddError(errorSummary.ToString());
+                result.AddError(errorString);
 
             return result;
 
