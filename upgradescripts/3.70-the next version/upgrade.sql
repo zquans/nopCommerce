@@ -899,6 +899,24 @@ set @resources='
   <LocaleResource Name="Admin.Catalog.Products.Fields.ManufacturerIds.Hint">
      <Value>Product manufacturer mappings.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Campaigns.Fields.CustomerRole">
+     <Value>Limited to customer role</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Campaigns.Fields.CustomerRole.Hint">
+     <Value>Choose a customer role which subscribers will get this email.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Campaigns.List.Stores">
+     <Value>Store</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Campaigns.List.Stores.Hint">
+     <Value>Search by a specific store.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Campaigns.List.CustomerRoles">
+     <Value>Customer roles</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Campaigns.List.CustomerRoles.Hint">
+     <Value>Search by a specific customer role.</Value>
+  </LocaleResource>
 </Language>
 '
 
@@ -3441,5 +3459,13 @@ GO
  BEGIN
  	INSERT [Setting] ([Name], [Value], [StoreId])
  	VALUES (N'ordersettings.GeneratePdfInvoiceInCustomerLanguage', N'true', 0)
+ END
+ GO
+
+ --new column
+ IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id=object_id('[Campaign]') and NAME='CustomerRoleId')
+ BEGIN
+ 	ALTER TABLE [Campaign]
+	ADD [CustomerRoleId] INT NOT NULL DEFAULT 0
  END
  GO
